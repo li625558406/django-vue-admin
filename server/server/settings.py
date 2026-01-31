@@ -195,6 +195,18 @@ CELERY_TIMEZONE = 'Asia/Shanghai'  # 设置时区
 CELERY_ENABLE_UTC = True  # 启动时区设置
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
+# Celery Beat 定时任务配置
+from celery.schedules import crontab
+CELERY_BEAT_SCHEDULE = {
+    'fetch-github-trending-daily': {
+        'task': 'fetch_github_trending',
+        'schedule': crontab(hour=9, minute=0),  # 每天早上 9 点执行
+        'options': {
+            'expires': 3600  # 任务过期时间（秒）
+        }
+    },
+}
+
 # swagger配置
 SWAGGER_SETTINGS = {
    'LOGIN_URL':'/django/admin/login/',

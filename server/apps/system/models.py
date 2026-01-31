@@ -216,3 +216,54 @@ class File(CommonAModel):
 
     def __str__(self):
         return self.name
+
+
+class GithubTrending(BaseModel):
+    """
+    GitHub 热门项目趋势表
+    用于存储每天获取的 GitHub Trending 数据及 AI 分析结果
+    """
+    # 基础信息
+    author = models.CharField('作者', max_length=100, db_index=True)
+    name = models.CharField('项目名称', max_length=200, db_index=True)
+    full_name = models.CharField('完整名称', max_length=300)  # author/name
+    url = models.URLField('项目地址', max_length=500)
+
+    # 项目描述
+    description = models.TextField('项目描述', null=True, blank=True)
+
+    # 编程语言
+    language = models.CharField('编程语言', max_length=50, null=True, blank=True, db_index=True)
+
+    # 统计数据
+    stars = models.IntegerField('Star 数', default=0)
+    forks = models.IntegerField('Fork 数', default=0)
+    current_period_stars = models.IntegerField('今日新增 Star', default=0)
+
+    # 头像
+    avatar = models.URLField('作者头像', max_length=500, null=True, blank=True)
+
+    # 数据来源信息
+    collection_date = models.DateField('采集日期', db_index=True)
+    since = models.CharField('时间范围', max_length=20, default='daily')  # daily, weekly, monthly
+
+    # AI 分析结果（存储为 JSON）
+    ai_analysis = models.JSONField('AI 分析结果', null=True, blank=True)
+
+    # 额外信息（存储原始数据或其他扩展信息）
+    extra_data = models.JSONField('额外数据', null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'GitHub 热门项目'
+        verbose_name_plural = verbose_name
+        ordering = ['-collection_date', '-current_period_stars']
+        # 联合索引：同一日期的同一项目只保留一条
+        # constraints = [
+        #     models.UniqueConstraint(
+        #         fields=['collection_date', 'full_name', 'since'],
+        #         name='unique_daily_trending'
+        #     )
+        # ]
+
+    def __str__(self):
+        return f"{self.full_name} - {self.collection_date}"

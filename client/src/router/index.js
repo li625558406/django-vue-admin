@@ -72,6 +72,13 @@ export const userRoutes = [
         component: () => import('@/views/user-dashboard/index'),
         meta: { title: '用户中心', icon: 'user' }
       },
+      // GitHub Trending 热榜页
+      {
+        path: 'github-trending',
+        name: 'GithubTrending',
+        component: () => import('@/views/github-trending/index'),
+        meta: { title: 'GitHub 热榜', icon: 'star' }
+      },
       // 可以添加更多用户端页面
       {
         path: 'profile',
@@ -81,6 +88,14 @@ export const userRoutes = [
         hidden: true
       }
     ]
+  },
+
+  // GitHub Trending 公开访问页（不需要登录）
+  {
+    path: '/github-trending',
+    name: 'GithubTrendingPublic',
+    component: () => import('@/views/github-trending/index'),
+    hidden: true
   }
 ]
 
@@ -242,6 +257,12 @@ export const adminAsyncRoutes = [
         name: 'Task',
         component: () => import('@/views/system/task'),
         meta: { title: '定时任务', icon: 'list', perms: ['ptask_manage'] }
+      },
+      {
+        path: 'github-trending',
+        name: 'GithubTrendingAdmin',
+        component: () => import('@/views/system/github-trending-admin'),
+        meta: { title: 'GitHub 热榜', icon: 'star', perms: ['github_trending_manage'] }
       }
     ]
   },
