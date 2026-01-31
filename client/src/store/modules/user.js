@@ -5,9 +5,11 @@ import { resetRouter } from '@/router'
 const getDefaultState = () => {
   return {
     token: getToken(),
+    username: '',
     name: '',
     avatar: '',
-    perms: []
+    perms: [],
+    roles: []
   }
 }
 
@@ -23,11 +25,17 @@ const mutations = {
   SET_NAME: (state, name) => {
     state.name = name
   },
+  SET_USERNAME: (state, username) => {
+    state.username = username
+  },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
   },
   SET_PERMS: (state, perms) => {
     state.perms = perms
+  },
+  SET_ROLES: (state, roles) => {
+    state.roles = roles
   }
 }
 
@@ -58,16 +66,20 @@ const actions = {
           reject('验证失败,重新登陆.')
         }
 
-        const { perms, name, avatar } = data
+        const { perms, name, avatar, username, roles } = data
 
-        // perms must be a non-empty array
-        if (!perms || perms.length <= 0) {
-          reject('没有任何权限!')
+        // perms must be a non-empty array (for admin panel)
+        // For user portal, we allow empty perms
+        if (!perms) {
+          commit('SET_PERMS', [])
+        } else {
+          commit('SET_PERMS', perms)
         }
-        
-        commit('SET_PERMS', perms)
+
         commit('SET_NAME', name)
+        commit('SET_USERNAME', username)
         commit('SET_AVATAR', avatar)
+        commit('SET_ROLES', roles || [])
         resolve(data)
       }).catch(error => {
         reject(error)

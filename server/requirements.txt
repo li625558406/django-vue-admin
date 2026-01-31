@@ -10,3 +10,8 @@ djangorestframework-simplejwt==5.5.1
 drf-yasg==1.21.7
 psutil==5.9.6
 redis==5.0.1
+
+# AI SDK
+openai>=1.0.0
+google-genai>=1.0.0  # 新版 Gemini SDK
+python-dotenv>=1.0.0  # 环境变量加载

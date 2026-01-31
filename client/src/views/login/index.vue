@@ -110,7 +110,8 @@ export default {
         if (valid) {
           this.loading = true
           this.$store.dispatch('user/login', this.loginForm).then(() => {
-            this.$router.push({ path: this.redirect || '/' })
+            // 管理端登录成功后跳转到管理后台首页
+            this.$router.push({ path: this.redirect || '/admin-panel/dashboard' })
             this.loading = false
           }).catch(() => {
             this.loading = false

@@ -3,8 +3,9 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-/* Layout */
-import Layout from '@/layout'
+/* Layouts */
+import Layout from '@/layout'  // 管理端布局
+import UserLayout from '@/layout-user'  // 用户端布局
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -17,35 +18,98 @@ import Layout from '@/layout'
  * redirect: noRedirect           if set noRedirect will no redirect in the breadcrumb
  * name:'router-name'             the name is used by <keep-alive> (must set!!!)
  * meta : {
-    perms: ['admin','editor']    control the page perms (you can set multiple perms)
-    title: 'title'               the name show in sidebar and breadcrumb (recommend set)
-    icon: 'svg-name'             the icon show in the sidebar
-    breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
-    activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
-  }
+ *    perms: ['admin','editor']    control the page perms (you can set multiple perms)
+ *    title: 'title'               the name show in sidebar and breadcrumb (recommend set)
+ *    icon: 'svg-name'             the icon show in the sidebar
+ *    breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
+ *    activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
+ *  }
  */
 
 /**
- * constantRoutes
- * a base page that does not have permission requirements
- * all perms can be accessed
+ * ========================================
+ * 用户端路由 (USER PORTAL ROUTES)
+ * ========================================
+ * 面向普通用户的公开访问页面
  */
-export const constantRoutes = [
+export const userRoutes = [
+  // 根路径重定向到用户登录
+  {
+    path: '/',
+    redirect: '/login'
+  },
+
+  // 用户登录页
   {
     path: '/login',
+    component: () => import('@/views/user-login/index'),
+    hidden: true
+  },
+
+  // 用户注册页（预留）
+  {
+    path: '/register',
+    component: () => import('@/views/user-login/index'), // 临时复用登录页
+    hidden: true
+  },
+
+  // 忘记密码页（预留）
+  {
+    path: '/forgot-password',
+    component: () => import('@/views/user-login/index'), // 临时复用登录页
+    hidden: true
+  },
+
+  // 用户中心（需要UserLayout）
+  {
+    path: '/user',
+    component: UserLayout,
+    redirect: '/user/dashboard',
+    children: [
+      {
+        path: 'dashboard',
+        name: 'UserDashboard',
+        component: () => import('@/views/user-dashboard/index'),
+        meta: { title: '用户中心', icon: 'user' }
+      },
+      // 可以添加更多用户端页面
+      {
+        path: 'profile',
+        name: 'UserProfile',
+        component: () => import('@/views/user-dashboard/index'),
+        meta: { title: '个人资料', icon: 'user' },
+        hidden: true
+      }
+    ]
+  }
+]
+
+/**
+ * ========================================
+ * 管理端路由 (ADMIN PORTAL ROUTES)
+ * ========================================
+ * 隐藏的管理系统，路径复杂化防止被猜测
+ */
+export const adminRoutes = [
+  // 管理系统登录页 - 使用复杂路径
+  {
+    path: '/sys-admin-2024/login',
     component: () => import('@/views/login/index'),
     hidden: true
   },
 
+  // 404页面
   {
     path: '/404',
     component: () => import('@/views/404'),
     hidden: true
   },
+
+  // 管理系统主路由 - 使用复杂前缀
   {
-    path: '/',
+    path: '/admin-panel',
     component: Layout,
-    redirect: '/dashboard',
+    redirect: '/admin-panel/dashboard',
     children: [{
       path: 'dashboard',
       name: 'Dashboard',
@@ -53,37 +117,40 @@ export const constantRoutes = [
       meta: { title: '首页', icon: 'dashboard' }
     }]
   },
+
+  // 修改密码
   {
-    path: '/changepassword',
+    path: '/admin-panel/changepassword',
     component: Layout,
-    redirect: '/changepassword',
+    redirect: '/admin-panel/changepassword',
     name: 'ChangePW',
     meta: { title: '修改密码', icon: 'tree' },
-    hidden:true,
+    hidden: true,
     children: [
       {
         path: '',
         name: 'ChangePassword',
         component: () => import('@/views/system/changepassword'),
-        meta: { title: '修改密码', noCache: true, icon: ''},
+        meta: { title: '修改密码', noCache: true, icon: '' },
         hidden: true
-      },
+      }
     ]
-  },
-
+  }
 ]
 
 /**
- * asyncRoutes
- * the routes that need to be dynamically loaded based on user perms
+ * ========================================
+ * 管理端异步路由 (ADMIN ASYNC ROUTES)
+ * ========================================
+ * 需要动态权限加载的管理端路由
  */
-export const asyncRoutes = [
+export const adminAsyncRoutes = [
   {
-    path: '/workflow',
+    path: '/admin-panel/workflow',
     component: Layout,
-    redirect: '/workflow/index',
+    redirect: '/admin-panel/workflow/index',
     name: 'workflow',
-    meta: { title: '工作流', icon: 'example', perms: ['workflow_manage']  },
+    meta: { title: '工作流', icon: 'example', perms: ['workflow_manage'] },
     children: [
       {
         path: 'index',
@@ -95,13 +162,13 @@ export const asyncRoutes = [
         path: 'ticket',
         name: 'ticket',
         component: () => import('@/views/workflow/ticket'),
-        meta: { title: '工单管理', icon: 'example' ,noCache: true, perms: ['workflow_ticket'] },
+        meta: { title: '工单管理', icon: 'example', noCache: true, perms: ['workflow_ticket'] }
       },
       {
         path: 'workFlowTickets',
         name: 'workFlowTickets',
         component: () => import('@/views/workflow/workFlowTickets'),
-        meta: { title: '工单', icon: 'example' ,noCache: true,},
+        meta: { title: '工单', icon: 'example', noCache: true },
         hidden: true
       },
       {
@@ -115,22 +182,22 @@ export const asyncRoutes = [
         path: 'ticketHandle',
         name: 'ticketHandle',
         component: () => import('@/views/workflow/ticketHandle'),
-        meta: { title: '工单处理', icon: 'example',noCache: true,},
+        meta: { title: '工单处理', icon: 'example', noCache: true },
         hidden: true
       },
       {
         path: 'ticketDetail',
         name: 'ticketDetail',
         component: () => import('@/views/workflow/ticketDetail'),
-        meta: { title: '工单详情', icon: 'example',noCache: true,},
+        meta: { title: '工单详情', icon: 'example', noCache: true },
         hidden: true
-      },
+      }
     ]
   },
   {
-    path: '/system',
+    path: '/admin-panel/system',
     component: Layout,
-    redirect: '/system/user',
+    redirect: '/admin-panel/system/user',
     name: 'System',
     meta: { title: '系统管理', icon: 'example', perms: ['system_manage'] },
     children: [
@@ -179,9 +246,9 @@ export const asyncRoutes = [
     ]
   },
   {
-    path: '/monitor',
+    path: '/admin-panel/monitor',
     component: Layout,
-    redirect: '/monitor/service',
+    redirect: '/admin-panel/monitor/service',
     name: 'Monitor',
     meta: { title: '系统监控', icon: 'example', perms: ['monitor_set'] },
     children: [
@@ -194,9 +261,9 @@ export const asyncRoutes = [
     ]
   },
   {
-    path: '/develop',
+    path: '/admin-panel/develop',
     component: Layout,
-    redirect: '/develop/perm',
+    redirect: '/admin-panel/develop/perm',
     name: 'Develop',
     meta: { title: '开发配置', icon: 'example', perms: ['dev_set'] },
     children: [
@@ -242,10 +309,15 @@ export const asyncRoutes = [
   { path: '*', redirect: '/404', hidden: true }
 ]
 
+/**
+ * ========================================
+ * 路由创建 (CREATE ROUTER)
+ * ========================================
+ */
 const createRouter = () => new Router({
-  // mode: 'history', // require service support
+  mode: 'history', // 使用 history 模式避免 hash 路由冲突
   scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
+  routes: [...userRoutes, ...adminRoutes]
 })
 
 const router = createRouter()

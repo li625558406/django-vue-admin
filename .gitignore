@@ -6,3 +6,6 @@ package-lock.json
 .vscode/
 server/static/
 img/wechat_group.jpg
+.claude
+.venv
+server/.venv/

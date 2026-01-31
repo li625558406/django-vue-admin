@@ -1,4 +1,4 @@
-import { asyncRoutes, constantRoutes } from '@/router'
+import { adminAsyncRoutes, userRoutes, adminRoutes } from '@/router'
 
 /**
  * Use meta.perm to determine if the current user has permission
@@ -41,7 +41,8 @@ const state = {
 const mutations = {
   SET_ROUTES: (state, routes) => {
     state.addRoutes = routes
-    state.routes = constantRoutes.concat(routes)
+    // 合并用户端路由 + 管理端基础路由 + 动态加载的管理端路由
+    state.routes = [...userRoutes, ...adminRoutes, ...routes]
   }
 }
 
@@ -50,9 +51,9 @@ const actions = {
     return new Promise(resolve => {
       let accessedRoutes
       if (perms.includes('admin')) {
-        accessedRoutes = asyncRoutes || []
+        accessedRoutes = adminAsyncRoutes || []
       } else {
-        accessedRoutes = filterAsyncRoutes(asyncRoutes, perms)
+        accessedRoutes = filterAsyncRoutes(adminAsyncRoutes, perms)
       }
       commit('SET_ROUTES', accessedRoutes)
       resolve(accessedRoutes)
