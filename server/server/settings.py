@@ -18,6 +18,18 @@ from . import conf
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# 加载 .env 文件中的环境变量
+try:
+    from dotenv import load_dotenv
+    # 尝试加载项目根目录的 .env 文件
+    env_path = os.path.join(os.path.dirname(BASE_DIR), '.env')
+    load_dotenv(env_path)
+    print(f"已加载环境变量文件: {env_path}")
+except ImportError:
+    print("警告: python-dotenv 未安装，无法加载 .env 文件")
+except Exception as e:
+    print(f"加载 .env 文件时出错: {str(e)}")
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/

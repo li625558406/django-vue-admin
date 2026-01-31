@@ -22,29 +22,32 @@ def fetch_github_trending():
     """
     定时任务：获取 GitHub Trending 数据并使用 AI 分析
     每天早上 9 点执行
+    分别获取日榜和周榜，每个榜单20条数据
     """
     try:
         logger.info("=" * 50)
         logger.info("开始执行 GitHub Trending 数据获取任务")
         logger.info("=" * 50)
 
-        # 要获取的编程语言列表
-        languages = ['python', 'javascript', 'go', 'rust', 'java', 'typescript']
-        since = 'daily'
         collection_date = date.today()
-
         total_count = 0
         success_count = 0
 
-        for language in languages:
-            logger.info(f"正在获取 {language} 的热门项目...")
+        # 分别获取日榜和周榜
+        for since in ['daily', 'weekly']:
+            logger.info(f"正在获取 {since} 热门项目...")
 
-            # 获取 Trending 数据
-            trending_data = get_github_trending(language=language, since=since)
+            # 获取 Trending 数据（不限语言，获取前20条）
+            trending_data = get_github_trending(language='', since=since)
 
             if not trending_data:
-                logger.warning(f"{language} 未获取到数据")
+                logger.warning(f"{since} 未获取到数据")
                 continue
+
+            # 只取前20条
+            trending_data = trending_data[:20]
+
+            logger.info(f"{since} 获取到 {len(trending_data)} 个项目")
 
             # 格式化数据
             formatted_data = format_trending_data(trending_data, collection_date)

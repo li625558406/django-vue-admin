@@ -27,7 +27,8 @@ class GithubTrendingListView(APIView):
     参数:
         - date: 日期 (YYYY-MM-DD 格式，默认今天)
         - language: 编程语言筛选
-        - limit: 返回数量限制 (默认 50)
+        - since: 榜单类型 (daily/weekly，默认 daily)
+        - limit: 返回数量限制 (默认 20)
     """
     authentication_classes = []
     permission_classes = []
@@ -37,7 +38,8 @@ class GithubTrendingListView(APIView):
             # 获取查询参数
             date_str = request.GET.get('date')
             language = request.GET.get('language', '')
-            limit = int(request.GET.get('limit', 50))
+            since = request.GET.get('since', 'daily')
+            limit = int(request.GET.get('limit', 20))
 
             # 确定查询日期
             if date_str:
@@ -54,6 +56,7 @@ class GithubTrendingListView(APIView):
             # 构建查询
             queryset = GithubTrending.objects.filter(
                 collection_date=query_date,
+                since=since,
                 is_deleted=False
             )
 

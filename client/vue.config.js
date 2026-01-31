@@ -37,7 +37,16 @@ module.exports = {
       errors: true
     },
     before: require('./mock/mock-server.js'),
-    historyApiFallback: true  // 支持 Vue Router 的 history 模式
+    historyApiFallback: true,  // 支持 Vue Router 的 history 模式
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': '/api'
+        }
+      }
+    }
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that

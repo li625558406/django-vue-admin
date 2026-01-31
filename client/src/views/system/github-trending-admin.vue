@@ -49,7 +49,7 @@
             <div class="project-info">
               <img :src="row.avatar" class="project-avatar" />
               <div>
-                <div class="project-name">{{ row.full_name }}</div>
+                <div class="project-name">{{ cleanFullName(row.full_name) }}</div>
                 <div class="project-url">
                   <a :href="row.url" target="_blank">{{ row.url }}</a>
                 </div>
@@ -136,7 +136,7 @@
         <div class="detail-section">
           <h3>基本信息</h3>
           <el-descriptions :column="2" border>
-            <el-descriptions-item label="项目名称">{{ currentItem.full_name }}</el-descriptions-item>
+            <el-descriptions-item label="项目名称">{{ cleanFullName(currentItem.full_name) }}</el-descriptions-item>
             <el-descriptions-item label="编程语言">{{ currentItem.language }}</el-descriptions-item>
             <el-descriptions-item label="Stars">{{ currentItem.stars }}</el-descriptions-item>
             <el-descriptions-item label="Forks">{{ currentItem.forks }}</el-descriptions-item>
@@ -150,8 +150,14 @@
         <div v-if="currentItem.ai_analysis" class="detail-section">
           <h3>AI 分析结果</h3>
           <el-descriptions :column="1" border>
-            <el-descriptions-item label="核心功能">
-              {{ currentItem.ai_analysis.core_features || '-' }}
+            <el-descriptions-item v-if="currentItem.ai_analysis.title" label="中文标题">
+              {{ currentItem.ai_analysis.title }}
+            </el-descriptions-item>
+            <el-descriptions-item v-if="currentItem.ai_analysis.summary" label="中文简介">
+              {{ currentItem.ai_analysis.summary }}
+            </el-descriptions-item>
+            <el-descriptions-item v-if="currentItem.ai_analysis.core_features" label="核心功能">
+              {{ currentItem.ai_analysis.core_features }}
             </el-descriptions-item>
             <el-descriptions-item label="技术栈">
               <el-tag
@@ -199,7 +205,7 @@ export default {
       filterDate: this.getToday(),
       filterLanguage: '',
       currentPage: 1,
-      pageSize: 20,
+      pageSize: 50,
       total: 0,
       detailDialogVisible: false,
       currentItem: null
@@ -213,6 +219,13 @@ export default {
       return new Date().toISOString().split('T')[0]
     },
 
+    // 清理项目名称中的多余空格
+    cleanFullName(fullName) {
+      if (!fullName) return ''
+      // 移除所有空格，处理 "author /name" 格式
+      return fullName.replace(/\s*\/\s*/g, '/').trim()
+    },
+
     async fetchData() {
       this.loading = true
       try {
@@ -223,14 +236,14 @@ export default {
           offset: (this.currentPage - 1) * this.pageSize
         }
 
-        const response = await axios.get('/api/github/trending/', { params })
+        const response = await axios.get('/api/system/github/trending/', { params })
 
-        if (response.data.success) {
-          this.tableData = response.data.data
+        if (response.data.data && response.data.data.success) {
+          this.tableData = response.data.data.data
           // 这里简单处理，实际应该从后端返回总数
-          this.total = response.data.data.length
+          this.total = response.data.data.total || response.data.data.data.length
         } else {
-          this.$message.error(response.data.message || '获取数据失败')
+          this.$message.error((response.data.data && response.data.data.message) || '获取数据失败')
         }
       } catch (error) {
         console.error('获取数据失败:', error)
@@ -248,16 +261,16 @@ export default {
       }).then(async () => {
         this.taskLoading = true
         try {
-          const response = await axios.post('/api/github/trending/trigger/')
+          const response = await axios.post('/api/system/github/trending/trigger/')
 
-          if (response.data.success) {
+          if (response.data.data && response.data.data.success) {
             this.$message.success('任务已触发，请稍后查看数据')
             // 3秒后自动刷新数据
             setTimeout(() => {
               this.fetchData()
             }, 3000)
           } else {
-            this.$message.error(response.data.message || '任务触发失败')
+            this.$message.error((response.data.data && response.data.data.message) || '任务触发失败')
           }
         } catch (error) {
           console.error('触发任务失败:', error)

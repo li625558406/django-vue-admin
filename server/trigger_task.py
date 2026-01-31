@@ -42,7 +42,7 @@ if __name__ == '__main__':
     print(f"  总记录数: {count}")
 
     if count > 0:
-        latest = GithubTrending.objects.filter(is_deleted=False).order_by('-create_datetime')[:5]
+        latest = GithubTrending.objects.filter(is_deleted=False).order_by('-create_time')[:5]
         print()
         print("最新的 5 条记录:")
         for item in latest:

@@ -157,13 +157,14 @@ export default {
 .modern-user-layout {
   min-height: 100vh;
   background: var(--bg-color);
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-family), sans-serif;
 }
 
 // 导航栏
 .navbar {
-  background: var(--surface-color);
-  border-bottom: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-light);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -173,8 +174,8 @@ export default {
 .navbar-container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 32px;
-  height: 70px;
+  padding: 0 36px;
+  height: 72px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -184,81 +185,85 @@ export default {
   .brand-link {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
     text-decoration: none;
-    transition: all 0.3s ease;
+    transition: all var(--transition-base);
 
     &:hover {
-      transform: translateY(-1px);
+      transform: translateY(-2px);
     }
   }
 
   .brand-logo {
-    width: 42px;
-    height: 42px;
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-    border-radius: var(--radius-md);
+    width: 46px;
+    height: 46px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--sky-blue-dark) 100%);
+    border-radius: var(--radius-lg);
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    box-shadow: 0 4px 12px rgba(79, 209, 197, 0.25);
-    transition: all 0.3s ease;
+    box-shadow: 0 6px 16px rgba(20, 184, 166, 0.2);
+    transition: all var(--transition-spring);
 
     svg {
-      width: 22px;
-      height: 22px;
+      width: 24px;
+      height: 24px;
     }
 
     .brand-link:hover & {
-      box-shadow: 0 6px 16px rgba(79, 209, 197, 0.35);
+      box-shadow: 0 8px 20px rgba(20, 184, 166, 0.3);
+      transform: scale(1.05);
     }
   }
 
   .brand-name {
     font-size: 20px;
-    font-weight: 700;
+    font-weight: 800;
     color: var(--text-primary);
-    letter-spacing: -0.3px;
+    letter-spacing: -0.5px;
   }
 }
 
 .navbar-menu {
   display: flex;
-  gap: 8px;
+  gap: 6px;
 }
 
 .nav-link {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 18px;
+  gap: 10px;
+  padding: 12px 20px;
   border-radius: var(--radius-md);
   text-decoration: none;
   color: var(--text-secondary);
-  font-weight: 500;
+  font-weight: 600;
   font-size: 14px;
-  transition: all 0.3s ease;
+  transition: all var(--transition-base);
   position: relative;
 
   .nav-icon {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
   }
 
   &:hover {
-    background: rgba(79, 209, 197, 0.08);
+    background: rgba(20, 184, 166, 0.06);
     color: var(--primary-color);
+    transform: translateY(-1px);
   }
 
   &.router-link-active {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--sky-blue-dark) 100%);
     color: white;
-    box-shadow: 0 2px 8px rgba(79, 209, 197, 0.3);
+    box-shadow: 0 4px 12px rgba(20, 184, 166, 0.25);
 
     svg {
       stroke: white;
     }
+
+    transform: translateY(-1px);
   }
 }
 
@@ -270,22 +275,23 @@ export default {
 .user-dropdown {
   position: relative;
   cursor: pointer;
-  padding: 8px 12px;
+  padding: 10px 14px;
   border-radius: var(--radius-md);
-  transition: all 0.3s ease;
+  transition: all var(--transition-base);
 
   &:hover {
-    background: rgba(79, 209, 197, 0.06);
+    background: rgba(20, 184, 166, 0.05);
   }
 }
 
 .user-avatar {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   border-radius: var(--radius-md);
   overflow: hidden;
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+  background: linear-gradient(135deg, var(--mint-green) 0%, var(--sky-blue) 100%);
   flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
 
   img {
     width: 100%;
@@ -302,8 +308,8 @@ export default {
     color: white;
 
     svg {
-      width: 22px;
-      height: 22px;
+      width: 24px;
+      height: 24px;
     }
   }
 }
@@ -311,21 +317,21 @@ export default {
 .user-info {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   margin-left: 12px;
 }
 
 .user-name {
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text-primary);
 }
 
 .dropdown-arrow {
-  width: 16px;
-  height: 16px;
-  color: var(--text-secondary);
-  transition: transform 0.3s ease;
+  width: 18px;
+  height: 18px;
+  color: var(--text-tertiary);
+  transition: transform var(--transition-base);
 
   &.active {
     transform: rotate(180deg);
@@ -334,39 +340,41 @@ export default {
 
 .dropdown-menu {
   position: absolute;
-  top: calc(100% + 8px);
+  top: calc(100% + 10px);
   right: 0;
-  min-width: 160px;
-  background: var(--surface-color);
+  min-width: 180px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-lg);
-  border: 1px solid var(--border-color);
-  padding: 8px;
+  border: 1px solid var(--border-light);
+  padding: 10px;
   z-index: 10;
 }
 
 .dropdown-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  border-radius: 8px;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--transition-fast);
   color: var(--text-primary);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
 
   svg {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     flex-shrink: 0;
-    color: var(--text-secondary);
+    color: var(--text-tertiary);
   }
 
   &:hover {
-    background: rgba(79, 209, 197, 0.08);
+    background: rgba(20, 184, 166, 0.08);
     color: var(--primary-color);
+    transform: translateX(2px);
 
     svg {
       color: var(--primary-color);
@@ -375,27 +383,27 @@ export default {
 }
 
 .dropdown-slide-enter-active, .dropdown-slide-leave-active {
-  transition: all 0.2s ease;
+  transition: all var(--transition-fast);
 }
 
 .dropdown-slide-enter, .dropdown-slide-leave-to {
   opacity: 0;
-  transform: translateY(-8px);
+  transform: translateY(-10px);
 }
 
 // 主内容
 .main-content {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 32px;
-  min-height: calc(100vh - 70px);
+  padding: 40px 36px;
+  min-height: calc(100vh - 72px);
 }
 
 // 响应式
 @media (max-width: 768px) {
   .navbar-container {
-    padding: 0 16px;
-    height: 64px;
+    padding: 0 20px;
+    height: 66px;
   }
 
   .navbar-menu {
@@ -403,7 +411,7 @@ export default {
   }
 
   .main-content {
-    padding: 20px 16px;
+    padding: 24px 20px;
   }
 
   .navbar-brand .brand-name {
@@ -415,7 +423,7 @@ export default {
   }
 
   .user-dropdown {
-    padding: 4px;
+    padding: 6px;
   }
 }
 </style>

@@ -18,12 +18,22 @@ class GithubTrendingAnalyzer:
 你是一个专业的技术分析师，擅长分析 GitHub 开源项目。
 请对给定的 GitHub 项目进行深入分析，并返回特定格式的 JSON 数据。
 
+重要要求：
+- 所有分析内容必须使用中文
+- 项目名称要有中文标题
+- 核心功能要有详细的中文介绍
+- 技术栈要使用中文描述
+- 应用场景要用中文说明
+- 亮点特色要用中文列举
+
 分析要求：
-1. 项目核心功能：用1-2句话概括项目的主要功能
-2. 技术栈：列出项目使用的主要技术和框架
-3. 应用场景：说明项目的适用场景和目标用户
-4. 亮点特色：总结项目的创新点和优势（2-3条）
-5. 推荐指数：根据项目质量、活跃度、star数等给出0-100的评分
+1. 项目标题：为项目起一个简洁的中文标题（不超过10个字）
+2. 项目简介：用2-3句话详细介绍项目的主要功能和价值
+3. 核心功能：列出项目的主要功能点
+4. 技术栈：列出项目使用的主要技术和框架（中文描述）
+5. 应用场景：说明项目的适用场景和目标用户
+6. 亮点特色：总结项目的创新点和优势（3-4条）
+7. 推荐指数：根据项目质量、活跃度、star数等给出0-100的评分
 
 返回格式要求：
 必须返回有效的 JSON 格式，不要有任何额外的文字说明。
@@ -51,12 +61,16 @@ Star 数：{project_data.get('stars', 0)}
 今日新增 Star：{project_data.get('current_period_stars', 0)}
 
 请使用联网搜索功能，获取该项目的最新信息和详细情况。
+**重要**：所有内容必须使用中文！
+
 返回 JSON 格式，包含以下字段：
 {{
-    "core_features": "项目核心功能（1-2句话）",
-    "tech_stack": ["技术1", "技术2", "技术3"],
-    "use_cases": "应用场景和目标用户",
-    "highlights": ["亮点1", "亮点2", "亮点3"],
+    "title": "项目的中文标题（不超过10个字）",
+    "summary": "项目的中文简介（2-3句话详细介绍）",
+    "core_features": "项目核心功能（中文描述）",
+    "tech_stack": ["技术1（中文）", "技术2（中文）", "技术3（中文）"],
+    "use_cases": "应用场景和目标用户（中文）",
+    "highlights": ["亮点1（中文）", "亮点2（中文）", "亮点3（中文）", "亮点4（中文）"],
     "recommendation_score": 85,
     "tags": ["标签1", "标签2", "标签3"]
 }}
@@ -102,17 +116,27 @@ Star 数：{project_data.get('stars', 0)}
         Returns:
             Dict: 默认分析结果
         """
+        full_name = project_data.get('full_name', '未知项目')
+        description = project_data.get('description', '暂无描述')
+        language = project_data.get('language', '未知')
+
+        # 生成简单的中文标题
+        title = f"{language}开源项目" if language and language != '未知' else "热门开源项目"
+
         return {
-            "core_features": project_data.get('description', '暂无描述')[:100] + '...',
-            "tech_stack": [project_data.get('language', '未知')] if project_data.get('language') else ["其他"],
+            "title": title,
+            "summary": f"{full_name} 是一个优秀的开源项目。{description[:100] if description else '暂无详细描述'}",
+            "core_features": description[:100] + '...' if len(description) > 100 else description,
+            "tech_stack": [language] if language else ["其他"],
             "use_cases": "适用于相关技术栈的开发者和企业",
             "highlights": [
                 f"Star 数: {project_data.get('stars', 0)}",
                 f"今日新增: {project_data.get('current_period_stars', 0)}",
-                f"编程语言: {project_data.get('language', '未知')}"
+                f"编程语言: {language}",
+                "GitHub 热门项目"
             ],
             "recommendation_score": min(100, 50 + project_data.get('current_period_stars', 0)),
-            "tags": [project_data.get('language', 'unknown'), "github", "trending"],
+            "tags": [language, "github", "trending"],
             "error": error_msg
         }
 

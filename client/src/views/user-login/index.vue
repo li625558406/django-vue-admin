@@ -234,8 +234,8 @@ export default {
   justify-content: center;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
-  font-family: 'Outfit', sans-serif;
+  background: linear-gradient(135deg, #FFFFFF 0%, #E0F2FE 50%, #F0FDFA 100%);
+  font-family: var(--font-family), sans-serif;
 }
 
 // 背景装饰元素
@@ -252,33 +252,35 @@ export default {
 .circle {
   position: absolute;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-color) 100%);
-  opacity: 0.08;
-  animation: float 20s ease-in-out infinite;
+  background: linear-gradient(135deg, var(--mint-green) 0%, var(--sky-blue) 100%);
+  opacity: 0.12;
+  animation: float 25s ease-in-out infinite;
+  filter: blur(60px);
 
   &.circle-1 {
-    width: 500px;
-    height: 500px;
-    top: -200px;
+    width: 600px;
+    height: 600px;
+    top: -250px;
     right: -150px;
     animation-delay: 0s;
   }
 
   &.circle-2 {
-    width: 400px;
-    height: 400px;
-    bottom: -150px;
+    width: 500px;
+    height: 500px;
+    bottom: -200px;
     left: -100px;
-    animation-delay: -7s;
+    animation-delay: -8s;
   }
 
   &.circle-3 {
-    width: 300px;
-    height: 300px;
+    width: 350px;
+    height: 350px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    animation-delay: -14s;
+    animation-delay: -16s;
+    opacity: 0.08;
   }
 }
 
@@ -287,31 +289,32 @@ export default {
     transform: translateY(0) scale(1);
   }
   50% {
-    transform: translateY(-30px) scale(1.05);
+    transform: translateY(-40px) scale(1.08);
   }
 }
 
 .floating-shape {
   position: absolute;
-  background: var(--primary-color);
-  opacity: 0.03;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--sky-blue) 100%);
+  opacity: 0.04;
   border-radius: var(--radius-lg);
-  animation: floatRotate 25s ease-in-out infinite;
+  animation: floatRotate 30s ease-in-out infinite;
+  filter: blur(40px);
 
   &.shape-1 {
-    width: 120px;
-    height: 120px;
-    top: 15%;
-    left: 10%;
-    animation-delay: -5s;
+    width: 150px;
+    height: 150px;
+    top: 12%;
+    left: 8%;
+    animation-delay: -6s;
   }
 
   &.shape-2 {
-    width: 80px;
-    height: 80px;
-    bottom: 20%;
-    right: 15%;
-    animation-delay: -12s;
+    width: 100px;
+    height: 100px;
+    bottom: 15%;
+    right: 12%;
+    animation-delay: -15s;
   }
 }
 
@@ -320,7 +323,7 @@ export default {
     transform: translateY(0) rotate(0deg);
   }
   50% {
-    transform: translateY(-40px) rotate(180deg);
+    transform: translateY(-50px) rotate(120deg);
   }
 }
 
@@ -331,10 +334,10 @@ export default {
   width: 100%;
   height: 100%;
   background-image:
-    linear-gradient(var(--border-color) 1px, transparent 1px),
-    linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
-  background-size: 60px 60px;
-  opacity: 0.3;
+    linear-gradient(var(--border-light) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border-light) 1px, transparent 1px);
+  background-size: 80px 80px;
+  opacity: 0.4;
 }
 
 // 登录卡片
@@ -342,21 +345,22 @@ export default {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 440px;
+  max-width: 460px;
   margin: 20px;
-  padding: 48px;
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(20px);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-lg);
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  animation: cardAppear 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 56px 48px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(24px);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-xl),
+              0 0 0 1px rgba(255, 255, 255, 0.6),
+              inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  animation: cardAppear 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 @keyframes cardAppear {
   from {
     opacity: 0;
-    transform: translateY(20px) scale(0.98);
+    transform: translateY(30px) scale(0.96);
   }
   to {
     opacity: 1;
@@ -367,14 +371,14 @@ export default {
 // Logo 区域
 .logo-section {
   text-align: center;
-  margin-bottom: 40px;
-  animation: fadeInDown 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s backwards;
+  margin-bottom: 48px;
+  animation: fadeInDown 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.12s backwards;
 }
 
 @keyframes fadeInDown {
   from {
     opacity: 0;
-    transform: translateY(-15px);
+    transform: translateY(-20px);
   }
   to {
     opacity: 1;
@@ -383,53 +387,56 @@ export default {
 }
 
 .logo-icon {
-  width: 64px;
-  height: 64px;
-  margin: 0 auto 20px;
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-  border-radius: var(--radius-lg);
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 24px;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--sky-blue-dark) 100%);
+  border-radius: var(--radius-xl);
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  box-shadow: 0 8px 20px rgba(79, 209, 197, 0.3);
-  transition: all 0.3s ease;
+  box-shadow: 0 12px 32px rgba(20, 184, 166, 0.25),
+              0 4px 12px rgba(20, 184, 166, 0.15);
+  transition: all var(--transition-spring);
 
   svg {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
   }
 
   &:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 12px 28px rgba(79, 209, 197, 0.4);
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 16px 40px rgba(20, 184, 166, 0.35),
+                0 6px 16px rgba(20, 184, 166, 0.2);
   }
 }
 
 .title {
-  font-size: 32px;
-  font-weight: 700;
+  font-size: 34px;
+  font-weight: 800;
   color: var(--text-primary);
-  margin: 0 0 8px 0;
-  letter-spacing: -0.5px;
+  margin: 0 0 12px 0;
+  letter-spacing: -0.8px;
+  line-height: 1.2;
 }
 
 .subtitle {
-  font-size: 15px;
+  font-size: 16px;
   color: var(--text-secondary);
   margin: 0;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 // 表单
 .login-form {
-  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s backwards;
+  animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s backwards;
 }
 
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(15px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -438,68 +445,71 @@ export default {
 }
 
 .form-group {
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 
   &:last-of-type {
-    margin-bottom: 20px;
+    margin-bottom: 24px;
   }
 }
 
 .form-label {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 
   .label-icon {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
     color: var(--primary-color);
   }
 }
 
 ::v-deep .modern-input {
   .el-input__inner {
-    height: 50px;
-    padding: 0 45px;
-    border: 2px solid var(--border-color);
+    height: 54px;
+    padding: 0 48px;
+    border: 2px solid var(--border-light);
     border-radius: var(--radius-md);
     background: white;
     font-size: 15px;
     color: var(--text-primary);
-    font-family: 'Outfit', sans-serif;
-    transition: all 0.3s ease;
+    font-family: var(--font-family), sans-serif;
+    transition: all var(--transition-base);
+    box-shadow: 0 1px 3px rgba(148, 163, 184, 0.05);
 
     &::placeholder {
-      color: #CBD5E0;
-      font-weight: 400;
+      color: var(--text-tertiary);
+      font-weight: 500;
     }
 
     &:focus {
       border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(79, 209, 197, 0.1);
+      box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.08),
+                  0 2px 8px rgba(148, 163, 184, 0.08);
+      background: rgba(255, 255, 255, 1);
     }
 
     &:hover {
-      border-color: #CBD5E0;
+      border-color: var(--border-color);
     }
   }
 
   .input-icon {
-    left: 16px;
-    color: var(--text-secondary);
+    left: 18px;
+    color: var(--text-tertiary);
     font-size: 18px;
   }
 
   .password-toggle {
-    right: 16px;
-    color: var(--text-secondary);
+    right: 18px;
+    color: var(--text-tertiary);
     font-size: 18px;
     cursor: pointer;
-    transition: color 0.3s ease;
+    transition: color var(--transition-fast);
 
     &:hover {
       color: var(--primary-color);
@@ -511,10 +521,10 @@ export default {
   position: absolute;
   top: 100%;
   left: 0;
-  margin-top: 6px;
+  margin-top: 8px;
   font-size: 13px;
-  color: #FC8181;
-  font-weight: 500;
+  color: var(--danger-color);
+  font-weight: 600;
 }
 
 // 表单选项
@@ -522,14 +532,14 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 }
 
 ::v-deep .modern-checkbox {
   .el-checkbox__label {
     font-size: 14px;
     color: var(--text-secondary);
-    font-weight: 500;
+    font-weight: 600;
   }
 
   .el-checkbox__input.is-checked + .el-checkbox__label {
@@ -537,8 +547,9 @@ export default {
   }
 
   .el-checkbox__inner {
-    border-radius: 4px;
+    border-radius: 6px;
     border-color: var(--border-color);
+    transition: all var(--transition-fast);
 
     &:hover {
       border-color: var(--primary-color);
@@ -555,8 +566,8 @@ export default {
   font-size: 14px;
   color: var(--primary-color);
   text-decoration: none;
-  font-weight: 600;
-  transition: all 0.3s ease;
+  font-weight: 700;
+  transition: all var(--transition-fast);
 
   &:hover {
     color: var(--primary-dark);
@@ -567,33 +578,36 @@ export default {
 // 登录按钮
 .login-btn {
   width: 100%;
-  height: 52px;
+  height: 54px;
   border: none;
   border-radius: var(--radius-md);
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--sky-blue-dark) 100%);
   color: white;
   font-size: 16px;
-  font-weight: 600;
-  font-family: 'Outfit', sans-serif;
-  box-shadow: 0 4px 12px rgba(79, 209, 197, 0.35);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  margin-bottom: 16px;
+  font-weight: 700;
+  font-family: var(--font-family), sans-serif;
+  box-shadow: 0 6px 16px rgba(20, 184, 166, 0.3),
+              0 2px 6px rgba(20, 184, 166, 0.15);
+  transition: all var(--transition-spring);
+  margin-bottom: 20px;
+  letter-spacing: 0.3px;
 
   &:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(79, 209, 197, 0.45);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(20, 184, 166, 0.4),
+                0 4px 10px rgba(20, 184, 166, 0.2);
   }
 
   &:active:not(:disabled) {
-    transform: translateY(0);
+    transform: translateY(-1px);
   }
 
   &.is-loading {
-    opacity: 0.8;
+    opacity: 0.85;
   }
 
   span {
-    font-weight: 600;
+    font-weight: 700;
   }
 }
 
@@ -601,38 +615,38 @@ export default {
 .error-message {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 16px;
-  background: #FED7D7;
-  border: 1px solid #FC8181;
+  gap: 10px;
+  padding: 14px 18px;
+  background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%);
+  border: 1px solid var(--danger-color);
   border-radius: var(--radius-md);
-  color: #C53030;
+  color: #DC2626;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
 
   svg {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     flex-shrink: 0;
   }
 }
 
 .slide-down-enter-active, .slide-down-leave-active {
-  transition: all 0.3s ease;
+  transition: all var(--transition-base);
 }
 
 .slide-down-enter, .slide-down-leave-to {
   opacity: 0;
-  transform: translateY(-10px);
+  transform: translateY(-12px);
 }
 
 // 注册区域
 .register-section {
-  margin-top: 28px;
-  padding-top: 24px;
-  border-top: 1px solid var(--border-color);
+  margin-top: 32px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border-light);
   text-align: center;
-  animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s backwards;
+  animation: fadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s backwards;
 }
 
 @keyframes fadeIn {
@@ -645,18 +659,18 @@ export default {
 }
 
 .register-text {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--text-secondary);
   margin: 0;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .register-link {
   color: var(--primary-color);
   text-decoration: none;
-  font-weight: 600;
-  margin-left: 4px;
-  transition: all 0.3s ease;
+  font-weight: 700;
+  margin-left: 6px;
+  transition: all var(--transition-fast);
 
   &:hover {
     color: var(--primary-dark);
@@ -668,22 +682,30 @@ export default {
 @media (max-width: 576px) {
   .login-card {
     margin: 16px;
-    padding: 32px 24px;
-    border-radius: var(--radius-lg);
+    padding: 40px 28px;
+    border-radius: var(--radius-xl);
   }
 
   .title {
-    font-size: 26px;
+    font-size: 28px;
+  }
+
+  .subtitle {
+    font-size: 15px;
   }
 
   .logo-icon {
-    width: 56px;
-    height: 56px;
+    width: 64px;
+    height: 64px;
 
     svg {
-      width: 28px;
-      height: 28px;
+      width: 32px;
+      height: 32px;
     }
+  }
+
+  .form-group {
+    margin-bottom: 24px;
   }
 }
 </style>
