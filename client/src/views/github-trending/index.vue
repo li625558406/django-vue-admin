@@ -7,6 +7,17 @@
         <p class="page-subtitle">探索今日最热门的开源项目</p>
       </div>
       <div class="filter-right">
+        <el-date-picker
+          v-model="selectedDate"
+          type="date"
+          placeholder="选择日期"
+          format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd"
+          :clearable="false"
+          @change="fetchTrendingData"
+          class="date-picker"
+        />
+
         <div class="toggle-buttons">
           <button
             :class="['toggle-btn', { active: selectedSince === 'daily' }]"
@@ -229,6 +240,7 @@ export default {
   name: 'GithubTrending',
   data() {
     return {
+      selectedDate: this.getToday(), // 默认今天
       selectedSince: 'daily', // daily 或 weekly
       limit: 50,
       loading: false,
@@ -300,15 +312,19 @@ export default {
 
       try {
         const params = {
-          date: this.getToday(), // 默认使用今天
+          date: this.selectedDate || this.getToday(), // 使用选择的日期
           since: this.selectedSince,
           limit: this.limit
         }
 
+        console.log('请求参数:', params)
         const response = await axios.get('/api/system/github/trending/', { params })
+        console.log('API响应:', response.data)
 
         if (response.data.data && response.data.data.success) {
           this.trendingList = response.data.data.data
+          console.log('数据列表:', this.trendingList)
+          console.log('数据长度:', this.trendingList.length)
         } else {
           this.error = (response.data.data && response.data.data.message) || '获取数据失败'
         }
@@ -378,6 +394,42 @@ export default {
     display: flex;
     align-items: center;
     gap: 16px;
+
+    .date-picker {
+      ::v-deep .el-input__inner {
+        border-radius: var(--radius-md) !important;
+        border: 2px solid var(--border-light) !important;
+        padding: 10px 30px 10px 16px !important;
+        font-size: 14px !important;
+        font-weight: 500 !important;
+        font-family: var(--font-family), sans-serif !important;
+        transition: all var(--transition-base) !important;
+        height: 42px !important;
+        line-height: 20px !important;
+        color: var(--text-primary) !important;
+      }
+
+      ::v-deep .el-input__inner:hover {
+        border-color: var(--primary-color) !important;
+      }
+
+      ::v-deep .el-input__inner:focus {
+        border-color: var(--primary-color) !important;
+        box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.08) !important;
+      }
+
+      ::v-deep .el-input__prefix {
+        color: var(--primary-color) !important;
+      }
+
+      ::v-deep .el-input__icon {
+        line-height: 42px !important;
+      }
+
+      ::v-deep .el-input__suffix {
+        line-height: 42px !important;
+      }
+    }
   }
 
   .toggle-buttons {
@@ -650,6 +702,15 @@ export default {
     .filter-right {
       flex-direction: column;
       width: 100%;
+      gap: 12px;
+
+      .date-picker {
+        width: 100%;
+
+        ::v-deep .el-input__inner {
+          width: 100%;
+        }
+      }
 
       .toggle-buttons {
         width: 100%;
@@ -684,19 +745,23 @@ export default {
 
 // 弹窗样式
 ::v-deep .project-dialog {
-  .el-dialog {
-    border-radius: var(--radius-2xl) !important;
-    max-width: 700px;
-    width: 90%;
-    overflow: hidden !important;
+  .el-dialog__wrapper {
+    .el-dialog {
+      border-radius: var(--radius-2xl) !important;
+      max-width: 700px;
+      width: 90%;
+      overflow: hidden !important;
+    }
   }
 
   .el-dialog__header {
     padding: 0;
+    border-radius: var(--radius-2xl) var(--radius-2xl) 0 0 !important;
   }
 
   .el-dialog__body {
     padding: 0;
+    border-radius: 0 0 var(--radius-2xl) var(--radius-2xl) !important;
   }
 
   .el-dialog__headerbtn {
@@ -712,6 +777,29 @@ export default {
   max-height: 70vh;
   overflow-y: auto;
   background: white;
+  border-radius: 0 0 var(--radius-2xl) var(--radius-2xl);
+
+  // 自定义滚动条样式
+  scrollbar-width: thin;
+  scrollbar-color: rgba(20, 184, 166, 0.2) transparent;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(20, 184, 166, 0.2);
+    border-radius: 3px;
+
+    &:hover {
+      background-color: rgba(20, 184, 166, 0.4);
+    }
+  }
+}
 
 .dialog-header {
   display: flex;
@@ -968,6 +1056,94 @@ export default {
 
   .dialog-actions {
     flex-direction: column;
+  }
+}
+
+// 日期选择器弹窗样式（全局）
+::v-deep .el-picker-panel {
+  border-radius: var(--radius-xl) !important;
+  border: 1px solid var(--border-light) !important;
+  box-shadow: var(--shadow-xl) !important;
+  font-family: var(--font-family), sans-serif !important;
+
+  .el-picker-panel__body-wrapper {
+    .el-date-picker__header {
+      .el-picker-panel__icon-btn {
+        color: var(--text-secondary) !important;
+
+        &:hover {
+          color: var(--primary-color) !important;
+        }
+      }
+
+      .el-date-picker__header-label {
+        color: var(--text-primary) !important;
+        font-weight: 700 !important;
+
+        &:hover {
+          color: var(--primary-color) !important;
+        }
+      }
+    }
+  }
+
+  .el-picker-panel__content {
+    .el-date-table th {
+      color: var(--text-secondary) !important;
+      font-weight: 600 !important;
+      border-bottom: 1px solid var(--border-light) !important;
+    }
+
+    .el-date-table td {
+      color: var(--text-primary) !important;
+
+      &.today .el-date-table-cell__text {
+        color: var(--primary-color) !important;
+        font-weight: 700 !important;
+      }
+
+      &.available:hover .el-date-table-cell__text {
+        background-color: rgba(20, 184, 166, 0.1) !important;
+      }
+
+      &.in-range .el-date-table-cell__text {
+        background-color: rgba(20, 184, 166, 0.15) !important;
+      }
+
+      &.start-date .el-date-table-cell__text,
+      &.end-date .el-date-table-cell__text {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--sky-blue-dark) 100%) !important;
+        color: white !important;
+      }
+
+      &.current:not(.disabled) .el-date-table-cell__text {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--sky-blue-dark) 100%) !important;
+        color: white !important;
+      }
+
+      &.disabled .el-date-table-cell__text {
+        color: var(--text-tertiary) !important;
+        background-color: transparent !important;
+      }
+    }
+  }
+}
+</style>
+
+<style lang="scss">
+// 全局样式 - 确保弹窗圆角生效
+.project-dialog.el-dialog__wrapper {
+  .el-dialog {
+    border-radius: 32px !important;
+    overflow: hidden !important;
+  }
+
+  .el-dialog__header {
+    border-radius: 32px 32px 0 0 !important;
+  }
+
+  .el-dialog__body {
+    border-radius: 0 0 32px 32px !important;
   }
 }
 </style>
