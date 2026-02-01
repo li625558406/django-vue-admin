@@ -2,10 +2,10 @@
 DeepSeek AI 公共调用模块
 提供统一的 AI 接口调用方法
 """
-import os
 import logging
 from typing import List, Dict, Optional, Any
 from openai import OpenAI
+from utils.config_manager import get_deepseek_api_key
 
 logger = logging.getLogger('log')
 
@@ -15,9 +15,9 @@ class DeepSeekClient:
 
     def __init__(self):
         """初始化 DeepSeek 客户端"""
-        self.api_key = os.environ.get('DEEPSEEK_API_KEY')
+        self.api_key = get_deepseek_api_key()
         if not self.api_key:
-            logger.warning('DEEPSEEK_API_KEY 未在环境变量中配置')
+            logger.warning('DEEPSEEK_API_KEY 未在数据字典或环境变量中配置')
 
         self.client = OpenAI(
             api_key=self.api_key,
